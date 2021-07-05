@@ -1,0 +1,31 @@
+.submit {
+    margin-top:10;
+    background-color: #008CBA; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.box {
+    margin-top:10;
+    display: inline-block;
+    align-items: center;
+    justify-self: center;
+    justify-items: center;
+}
+
+.input {
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-align: center;
+    text-justify:auto
+}

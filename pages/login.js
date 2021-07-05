@@ -1,7 +1,23 @@
-import React, { useState } from "react";
+import React, { useState,createContext, useContext } from "react";
 import { useRouter } from "next/router";
 import { makeStyles } from '@material-ui/core/styles';
-import { Input,TextField,MuiAlert } from '@material-ui/core';
+import { Input,TextField, Alert } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import Button from '@material-ui/core/Button';
+// import IconButton from '@material-ui/core/IconButton';
+// import CloseIcon from '@material-ui/icons/Close';
+import styled from 'styled-components';
+import request from '../utils/request';
+import styles from './login.module.scss';
+import {profileContext}  from './main'
+
+const Submit = styled.input`
+        'margin-top':10;
+      `;
+
+const Box = styled.div`
+        'margin-top':10;
+      `;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,40 +28,77 @@ const useStyles = makeStyles((theme) => ({
   },
   input:{
     display: 'flex',
-    marginTop: '50px',
+    // marginTop: '50px',
+    'margin-top':40,
+
   
   },
   textInput:{
     'margin-left': 10,
     // 'width': 10
-    // 'height':10
+  },
+  submit:{
+    'margin-top':40,
+    'margin':40
   }
 }));
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-export default function Login() {
+export default function loginLogin() {
   const router = useRouter();
   const classes = useStyles();
-  let [username,setUsername]= useState()
+  const [username,setUsername]= useState()
+  const [password,setPassword]= useState()
+  const [open, setOpen] = useState(false);
+  const [snackMsg, setSnackMsg] = useState(false);
+  const profile = useContext(profileContext)
+
 
 
   const handleSubmit = async (event) => {
-    console.log("here");
     event.preventDefault();
-
     let result = await loginQuery()
     if(result.status == 200){
-      <Alert severity="success">This is a success message!</Alert>
-      router.replace("/dashboard");
+
+      console.log('profile :>> ', profile);
+      setSnackMsg("successfully logged in")
+      setOpen(true)
+      setTimeout(() => {
+        router.replace("/dashboard");
+      }, 1000);
+    }else{
+      setOpen(true)
+      setSnackMsg("log in failed")
     }
   };
 
-  const loginQuery = ()=>{
 
-    return { msg: 'success', status: 200}
+  const onChangeUsername = (e)=>{
+    const { target: { name, value } } = e;
+    setUsername(value)
+  }
+
+  const onChangePassword = (e)=>{
+    const { target: { name, value } } = e;
+    setPassword(value)
+  }
+
+  const loginQuery = async ()=>{
+
+    let body={
+      username:username,
+      password:password
+    }
+    let result = await request("/login",null,"POST",JSON.stringify(body))
+    console.log('result :>> ', result);
+    if(result){
+      profile.name = result.name
+      // setProfile({...profile,name:result.name})
+      // setProfile({...profile,name:result.name})
+    // if(username == "shayan" && password == "123"){
+      return { msg: 'success', status: 200}
+    }else{
+      return { msg: 'fail', statrrorus: 400}
+    }
   }
 
 
@@ -53,78 +106,45 @@ export default function Login() {
     <div style={{ textAlign: "center" }}>
       <form className={classes.root} onSubmit={handleSubmit}>
         <h4>Login Form</h4>
-        <div style={{ flex: 1, flexDirection: "column" }}>
-          <div style={{ flex: 1}}>
-            <label className={classes.input}>
+        <div style={{ flex: 1, flexDirection: "column" }} >
+          <Box className={styles.box}>
+            <label className={classes.input}  style={{marginTop:10}}>
               Username: 
-              <TextField type="text" name="username" variant="filled" className={classes.textInput}/>
+              <TextField className={styles.input} style={{textAlign:'center', height:5}} type="text" name={username} variant="filled" onChange={onChangeUsername} className={classes.textInput}/>
             </label>
-          </div>
+          </Box>
 
-          <div style={{ flex: 1, marginTop: 10 }}>
+          <Box className={styles.box} style={{marginTop:10}}>
             <label className={classes.input}>
               Password: 
-              <TextField type="text" name="password" variant="filled" className={classes.textInput}/>
+              <TextField className={styles.input} type="text" name={password} variant="filled" onChange={onChangePassword} className={classes.textInput}/>
             </label>
-          </div>
+          </Box>
         </div>
-
-        <input className={classes.input} type="submit" value="Log in" />
+        <div style={{marginTop:20}}>
+          <Submit className={styles.submit} type="submit" value="Log in"/>
+        </div>
       </form>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={()=>setOpen(false)}
+        message={snackMsg}
+        action={
+          <React.Fragment>
+            <Button color="secondary" size="small" onClick={()=>setOpen(false)}>
+              UNDO
+            </Button>
+            {/* <IconButton size="small" aria-label="close" color="inherit" onClick={()=>console.log("closed")}>
+              <CloseIcon fontSize="small" />
+            </IconButton> */}
+          </React.Fragment>
+        }
+      />
     </div>
   );
 }
-
-/* 
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
-
-export default function CustomizedSnackbars() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  return (
-    <div className={classes.root}>
-      <Button variant="outlined" onClick={handleClick}>
-        Open success snackbar
-      </Button>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          This is a success message!
-        </Alert>
-      </Snackbar>
-      <Alert severity="error">This is an error message!</Alert>
-      <Alert severity="warning">This is a warning message!</Alert>
-      <Alert severity="info">This is an information message!</Alert>
-      <Alert severity="success">This is a success message!</Alert>
-    </div>
-  );
-} */
