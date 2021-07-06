@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function loginLogin() {
+const Login = () => {
   const router = useRouter();
   const classes = useStyles();
   const [username,setUsername]= useState()
@@ -110,14 +110,14 @@ export default function loginLogin() {
           <Box className={styles.box}>
             <label className={classes.input}  style={{marginTop:10}}>
               Username: 
-              <TextField className={styles.input} style={{textAlign:'center', height:5}} type="text" name={username} variant="filled" onChange={onChangeUsername} className={classes.textInput}/>
+              <TextField className={styles.input} style={{textAlign:'center', height:5}} type="text" name={username} variant="filled" onChange={onChangeUsername} />
             </label>
           </Box>
 
           <Box className={styles.box} style={{marginTop:10}}>
             <label className={classes.input}>
               Password: 
-              <TextField className={styles.input} type="text" name={password} variant="filled" onChange={onChangePassword} className={classes.textInput}/>
+              <TextField className={styles.input} type="text" name={password} variant="filled" onChange={onChangePassword} />
             </label>
           </Box>
         </div>
@@ -148,3 +148,5 @@ export default function loginLogin() {
     </div>
   );
 }
+
+export default Login

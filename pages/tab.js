@@ -12,7 +12,6 @@ const TabContainer = styled.div`
 export default function Tab({}) {
   // const router = useRouter();
 
-
   return (
     <TabContainer
       style={{justifyContent: "space-between", textAlign: "center" , padding:10 , border: 2, borderStyle:'solid'}}

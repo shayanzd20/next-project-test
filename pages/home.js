@@ -1,7 +1,8 @@
 import React from "react";
 import Tab from './tab';
 
-export default ({ name }) => (
+
+const Home = ({ name }) => (
   <div style={{ textAlign: "center" }}>
     <Tab />
     <form>
@@ -18,3 +19,5 @@ export default ({ name }) => (
     </form>
   </div>
 );
+
+export default Home

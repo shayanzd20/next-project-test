@@ -5,7 +5,7 @@ import Dashboard from './dashboard';
 
 export const profileContext = createContext({username: null, name: null, family: null})
 
-export default ({ name }) => {
+const Main = ({ name }) => {
     let [profile,setProfile] = useState({username: null, name: null, family: null})
 
     return <profileContext.Provider value={{profile,setProfile}}>
@@ -17,3 +17,4 @@ export default ({ name }) => {
 }
 
 
+export default Main
