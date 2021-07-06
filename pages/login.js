@@ -91,9 +91,6 @@ const Login = () => {
     let result = await request("/login",null,"POST",JSON.stringify(body))
     console.log('result :>> ', result);
     if(result){
-      profile.name = result.name
-      // setProfile({...profile,name:result.name})
-      // setProfile({...profile,name:result.name})
     // if(username == "shayan" && password == "123"){
       return { msg: 'success', status: 200}
     }else{
